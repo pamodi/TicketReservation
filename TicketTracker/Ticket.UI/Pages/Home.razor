@@ -1,0 +1,166 @@
+﻿@page "/"
+
+@inject NavigationManager NavigationManager
+
+<div class="container-fluid mt-0 px-0">
+    <!-- Banner Section -->
+    <div class="hero-section position-relative text-white text-center d-flex flex-column justify-content-center align-items-center">
+        <div class="overlay"></div>
+        <div class="content animate__animated animate__fadeInDown">
+            <h1 class="display-3 fw-bold">Exclusive Ticket Reservation</h1>
+            <p class="lead">Join us for an unforgettable experience!</p>
+        </div>
+    </div>
+
+    <!-- Event Details & Location Section -->
+    <div class="container event-details mt-3 mb-2 px-0">
+        <div class="row align-items-center">
+            <!-- Event Details -->
+            <div class="col-md-6 position-relative">
+                <div class="card shadow-lg p-2 animate__animated animate__fadeInLeft event-card">
+                    <div class="card-body">
+                        <h2 class="card-title text-center mb-4 fw-bold">📍 Event Details</h2>
+                        <p style="color:black"><strong>🎉</strong> A special gathering for past students of Ananda and Nalanda College to celebrate friendship, unity, and cherished memories. Reconnect, relive, and enjoy an evening of fun and laughter.</p>
+                        <p style="color:black"><strong>📅</strong> March 15, 2025, 7:00 PM</p>
+                        <p class="d-flex align-items-center" style="color:black">
+                            <strong>📞</strong>
+                            <a href="tel:+14162705874" class="ms-2 text-decoration-none" style="color:black">+1 416 270 5874</a>
+                        </p>
+                        <p class="d-flex align-items-center">
+                            <strong>📧</strong>
+                            <a href="mailto:info@event.com" class="ms-2" style="color:black">info@event.com</a>
+                        </p>
+                        <p class="fw-bold text-center"><em>🔥 Hurry up and reserve your tickets! 🔥</em></p>
+                    </div>
+                    <button type="button" @onclick="onReserveClick" class="btn btn-gold btn-sm reserve-btn animate__animated animate__pulse animate__infinite">
+                        🎟 Reserve Now
+                    </button>
+                </div>
+            </div>
+
+            <!-- Location Section with Animation -->
+            <div class="col-md-6">
+                <div class="card shadow-lg p-2 animate__animated animate__fadeInRight event-card">
+                    <div class="card-body text-center">
+                        <h2 class="card-title mb-4 fw-bold">🌍 Event Venue</h2>
+
+                        <!-- Show Loading Spinner -->
+                        @if (isLoading)
+                        {
+                            <div class="loading-spinner">
+                                <div class="spinner-border" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                            </div>
+                        }
+
+                        <div class="map-container rounded overflow-hidden">
+                            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2879.0753388678663!2d-79.23026572398885!3d43.81279667109488!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89d4d0cb7b2d5003%3A0xd37b947fe7dcf99e!2s148%20Crow%20Trail%2C%20Scarborough%2C%20ON%20M1B%201Y3!5e0!3m2!1sen!2sca!4v1741265736734!5m2!1sen!2sca"
+                                    width="100%"
+                                    height="250"
+                                    style="border:0; border-radius: 10px;"
+                                    allowfullscreen
+                                    loading="lazy"
+                                    referrerpolicy="no-referrer-when-downgrade"
+                                    @onload="OnMapLoad">
+                            </iframe>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Custom CSS -->
+<style>
+    body {
+        background: linear-gradient(135deg, #2c2c2c 30%, #6b0000 50%, #d4af37 90%);
+        color: #fff;
+        margin: 0;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden; 
+    }
+
+    .container-fluid {
+        flex-grow: 1;
+        padding: 0;
+    }
+
+    .hero-section {
+        height: 300px;
+        background: url('/assets/banner2.jpg') no-repeat center center/cover;
+        position: relative;
+    }
+
+    .overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.6);
+    }
+
+    .content {
+        position: relative;
+        z-index: 1;
+    }
+
+    .event-card {
+        background: rgba(173, 168, 168, 0.6);
+        border-radius: 8px;
+        box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.3);
+        backdrop-filter: blur(10px);
+    }
+
+    .btn-gold {
+        background: linear-gradient(135deg, #d4af37, #b8860b);
+        color: white;
+        font-weight: bold;
+        border: none;
+        transition: all 0.3s ease-in-out;
+    }
+
+        .btn-gold:hover {
+            background: linear-gradient(135deg, #b8860b, #8b6508);
+            color: #fff;
+        }
+
+    .map-container {
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+    .loading-spinner {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 250px;
+    }
+
+    .reserve-btn {
+        position: absolute;
+        bottom: 10px;
+        right: 10px;
+        padding: 8px 12px;
+        font-size: 14px;
+        border-radius: 5px;
+    }
+</style>
+
+@code {
+    private bool isLoading = true;
+
+    protected async Task onReserveClick()
+    {
+        NavigationManager.NavigateTo("/reserve-ticket");
+    }
+
+    private void OnMapLoad()
+    {
+        isLoading = false;
+    }
+}

@@ -1,0 +1,94 @@
+﻿@page "/not-found"
+
+<div class="container d-flex flex-column align-items-center justify-content-center vh-100 text-center">
+    <img src="/assets/404 Error.png" alt="404 Not Found" class="not-found-img animate__animated animate__zoomIn">
+    <h1 class="display-4 fw-bold mt-3 text-danger">Oops! Page Not Found</h1>
+    <p class="lead fw-bold" style="color:white">The page you are looking for doesn’t exist or may have been moved.</p>
+    <button class="btn btn-gold btn-sm animate__animated animate__pulse animate__infinite mt-0 -3" @onclick="GoHome">🏠 Go Back Home</button>
+</div>
+
+<style>
+    body {
+        background: linear-gradient(135deg, #2c2c2c 30%, #6b0000 50%, #d4af37 90%);
+        color: #fff;
+        margin: 0;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+    }
+
+    .container-fluid {
+        flex-grow: 1;
+        padding: 0;
+    }
+
+    .not-found-img {
+        max-width: 400px;
+    }
+   
+
+    .overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.6);
+    }
+
+    .content {
+        position: relative;
+        z-index: 1;
+    }
+
+    .event-card {
+        background: rgba(173, 168, 168, 0.6);
+        border-radius: 8px;
+        box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.3);
+        backdrop-filter: blur(10px);
+    }
+
+    .btn-gold {
+        background: linear-gradient(135deg, #d4af37, #b8860b);
+        color: white;
+        font-weight: bold;
+        border: none;
+        transition: all 0.3s ease-in-out;
+    }
+
+        .btn-gold:hover {
+            background: linear-gradient(135deg, #b8860b, #8b6508);
+            color: #fff;
+        }
+
+    .map-container {
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+    .loading-spinner {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 250px;
+    }
+
+    .reserve-btn {
+        position: absolute;
+        bottom: 10px;
+        right: 10px;
+        padding: 8px 12px;
+        font-size: 14px;
+        border-radius: 5px;
+    }
+</style>
+
+@code {
+    [Inject] private NavigationManager Navigation { get; set; }
+
+    private void GoHome()
+    {
+        Navigation.NavigateTo("/");
+    }
+}
