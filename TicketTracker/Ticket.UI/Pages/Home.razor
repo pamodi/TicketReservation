@@ -13,36 +13,39 @@
     </div>
 
     <!-- Event Details & Location Section -->
-    <div class="container event-details mt-3 mb-2 px-0">
-        <div class="row align-items-center">
+    <div class="container event-details mt-3 mb-2 px-2 px-md-0">
+        <div class="row align-items-center gy-4">
             <!-- Event Details -->
-            <div class="col-md-6 position-relative">
+            <div class="col-12 col-md-6">
                 <div class="card shadow-lg p-2 animate__animated animate__fadeInLeft event-card">
                     <div class="card-body">
-                        <h2 class="card-title text-center mb-4 fw-bold">📍 Event Details</h2>
-                        <p style="color:black"><strong>🎉</strong> A special gathering for past students of Ananda and Nalanda College to celebrate friendship, unity, and cherished memories. Reconnect, relive, and enjoy an evening of fun and laughter.</p>
-                        <p style="color:black"><strong>📅</strong> March 15, 2025, 7:00 PM</p>
-                        <p class="d-flex align-items-center" style="color:black">
+                        <h2 class="card-title text-center mb-3 fw-bold">📍 Event Details</h2>
+                        <p class="text-dark"><strong>🎉</strong> A special gathering for past students of Ananda and Nalanda College to celebrate friendship, unity, and cherished memories.</p>
+                        <p class="text-dark"><strong>📅</strong> March 25, 2025, 7:00 PM</p>
+                        <p class="d-flex align-items-center text-dark">
                             <strong>📞</strong>
-                            <a href="tel:+14162705874" class="ms-2 text-decoration-none" style="color:black">+1 416 270 5874</a>
+                            <a href="tel:+14162705874" class="ms-2 text-decoration-none text-dark">+1 416 270 5874</a>
                         </p>
                         <p class="d-flex align-items-center">
                             <strong>📧</strong>
-                            <a href="mailto:info@event.com" class="ms-2" style="color:black">info@event.com</a>
+                            <a href="mailto:info@event.com" class="ms-2 text-dark">info@event.com</a>
                         </p>
                         <p class="fw-bold text-center"><em>🔥 Hurry up and reserve your tickets! 🔥</em></p>
+
+                        <div class="text-center mt-3">
+                            <button type="button" @onclick="onReserveClick" class="btn btn-gold btn-sm reserve-btn animate__animated animate__pulse animate__infinite">
+                                🎟 Reserve Now
+                            </button>
+                        </div>
                     </div>
-                    <button type="button" @onclick="onReserveClick" class="btn btn-gold btn-sm reserve-btn animate__animated animate__pulse animate__infinite">
-                        🎟 Reserve Now
-                    </button>
                 </div>
             </div>
 
             <!-- Location Section with Animation -->
-            <div class="col-md-6">
+            <div class="col-12 col-md-6">
                 <div class="card shadow-lg p-2 animate__animated animate__fadeInRight event-card">
                     <div class="card-body text-center">
-                        <h2 class="card-title mb-4 fw-bold">🌍 Event Venue</h2>
+                        <h2 class="card-title mb-3 fw-bold">🌍 Event Venue</h2>
 
                         <!-- Show Loading Spinner -->
                         @if (isLoading)
@@ -55,7 +58,7 @@
                         }
 
                         <div class="map-container rounded overflow-hidden">
-                            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2879.0753388678663!2d-79.23026572398885!3d43.81279667109488!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89d4d0cb7b2d5003%3A0xd37b947fe7dcf99e!2s148%20Crow%20Trail%2C%20Scarborough%2C%20ON%20M1B%201Y3!5e0!3m2!1sen!2sca!4v1741265736734!5m2!1sen!2sca"
+                            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2878.4174318222435!2d-79.23809542398806!3d43.82644197109438!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89d4d725123a1045%3A0x74dbef74b1af383c!2sGrand%20Cinnamon%20Banquet%20%26%20Convention!5e0!3m2!1sen!2sca!4v1741299369867!5m2!1sen!2sca"
                                     width="100%"
                                     height="250"
                                     style="border:0; border-radius: 10px;"
@@ -81,7 +84,6 @@
         min-height: 100vh;
         display: flex;
         flex-direction: column;
-        overflow: hidden; 
     }
 
     .container-fluid {
@@ -93,6 +95,35 @@
         height: 300px;
         background: url('/assets/banner2.jpg') no-repeat center center/cover;
         position: relative;
+        padding: 20px;
+    }
+
+    .media (max-width: 768px) {
+        .hero-section {
+            height: 200px;
+            overflow: auto;
+        }
+
+        .hero-section .content {
+            overflow: auto;
+        }
+
+        .display-4 {
+            font-size: 1.8rem;
+        }
+
+        .lead {
+            font-size: 1rem;
+        }
+
+        .event-details {
+            padding-bottom: 20px;
+        }
+
+        .event-card {
+            padding: 1rem;
+        }
+
     }
 
     .overlay {
@@ -131,7 +162,6 @@
 
     .map-container {
         border-radius: 8px;
-        overflow: hidden;
     }
 
     .loading-spinner {
@@ -139,15 +169,6 @@
         justify-content: center;
         align-items: center;
         height: 250px;
-    }
-
-    .reserve-btn {
-        position: absolute;
-        bottom: 10px;
-        right: 10px;
-        padding: 8px 12px;
-        font-size: 14px;
-        border-radius: 5px;
     }
 </style>
 

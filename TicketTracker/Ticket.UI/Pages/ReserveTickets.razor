@@ -18,7 +18,7 @@
 
     <!-- Ticket Reservation Form -->
     <div class="container-fluid p-0 d-flex flex-column align-items-center justify-content-center">
-        <div class="container d-flex align-items-center justify-content-center vh-100 overflow-hidden">
+        <div class="container d-flex align-items-center justify-content-center">
             <div class="row w-100">
 
                 <!-- Ticket Reservation Form -->
@@ -37,29 +37,6 @@
                                         <ValidationMessage For="() => reserveTicketModel.Name" class="text-danger" />
                                     </div>
                                 </div>
-
-                                @* <div class="row mt-2"> *@
-                                @*     <div class="col-md-4"> *@
-                                @*         <label class="form-label fw-bold">Email Address</label> *@
-                                @*     </div> *@
-                                @*     <div class="col-md-8"> *@
-                                @*         <InputText type="email" class="form-control" @bind-Value="reserveTicketModel.Email" /> *@
-                                @*         <ValidationMessage For="() => reserveTicketModel.Email" class="text-danger" /> *@
-                                @*     </div> *@
-                                @* </div> *@
-
-                                @* <div class="row mt-2"> *@
-                                @*     <div class="col-md-4"> *@
-                                @*         <label class="form-label fw-bold">Phone Number</label> *@
-                                @*     </div> *@
-                                @*     <div class="col-md-8"> *@
-                                @*         <InputText id="phoneInput" type="tel" class="form-control" @bind-Value="reserveTicketModel.Phone" /> *@
-                                @*         <ValidationMessage For="() => reserveTicketModel.Phone" class="text-danger" /> *@
-                                @*     </div> *@
-                                @*     <small class="text-muted d-block mt-1"> *@
-                                @*         📢 If you haven't provided an email, you must enter a phone number. *@
-                                @*     </small> *@
-                                @* </div> *@
 
                                 <div class="row mt-2">
                                     <div class="col-md-4">
@@ -180,7 +157,6 @@
         min-height: 100vh;
         display: flex;
         flex-direction: column;
-        overflow: hidden;
     }
 
     .container-fluid {
@@ -262,6 +238,42 @@
 
     .btn-secondary {
         background-color: #6971799c;
+    }
+
+    .media (max-width: 768px) {
+        .container-fluid {
+            padding: 0 10px;
+        }
+
+        .form-card {
+            max-width: 100%;
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        .btn {
+            width: 100%;
+        }
+
+        .row {
+            flex-direction: column;
+        }
+
+        .col-md-8 {
+            width: 100%;
+        }
+
+        .right-img {
+            display: none; /* Hide the right image on mobile */
+        }
+
+        .important-notice {
+            font-size: 14px;
+        }
+
+        .toast {
+            width: 90%;
+        }
     }
 </style>
 

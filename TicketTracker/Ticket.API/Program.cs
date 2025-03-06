@@ -18,7 +18,7 @@ builder.Services.AddOpenApi();
 
 builder.Services.AddCors(options => options.AddPolicy("CorsPolicy", policy =>
 {
-	policy.WithOrigins("http://charityweb.runasp.net", "https://localhost:7280")
+	policy.WithOrigins("http://ticket-reservation.runasp.net", "https://localhost:7280")
 	.AllowAnyMethod().AllowAnyHeader().AllowCredentials();
 }));
 
