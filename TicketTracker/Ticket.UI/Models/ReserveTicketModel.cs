@@ -7,11 +7,11 @@ namespace Ticket.UI.Models
 		[Required(ErrorMessage = "Please enter your name.")]
 		public string Name { get; set; } = "";
 
-		[RequiredIfEmpty(nameof(Phone), ErrorMessage = "Either Email or Phone must be provided.")]
+		//[RequiredIfEmpty(nameof(PhoneNumber), ErrorMessage = "Either Email or Phone must be provided.")]
 		public string Email { get; set; } = "";
 
-		[RequiredIfEmpty(nameof(Email), ErrorMessage = "Either Phone or Email must be provided.")]
-		public string Phone { get; set; } = "";
+		//[RequiredIfEmpty(nameof(Email), ErrorMessage = "Either Phone or Email must be provided.")]
+		public string PhoneNumber { get; set; } = "";
 
 		public bool IsStudent { get; set; } = false;
 

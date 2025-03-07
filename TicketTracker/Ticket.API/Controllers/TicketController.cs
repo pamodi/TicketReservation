@@ -18,9 +18,11 @@ namespace Ticket.API.Controllers
 		[HttpPost("reserve")]
 		public IActionResult Post([FromBody] ReserveTicketModel model)
 		{
-			_ticketService.Save(model);
-
-			return Ok(new { Message = "Ticket reserved successfully" });
+			var isSuccess = _ticketService.Save(model);
+			if (isSuccess)
+				return Ok(new { Message = "Ticket reserved successfully" });
+			else
+				return BadRequest(new { Message = "Please provide either email or phone" });
 		}
 
 		[HttpGet("lookup/contacts")]

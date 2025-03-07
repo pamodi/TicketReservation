@@ -9,3 +9,11 @@ window.showToast = () => {
 		toast.show();
 	}
 };
+
+window.showErrorToast = () => {
+	let toastEl = document.getElementById('errorToast');
+	if (toastEl) {
+		let toast = new bootstrap.Toast(toastEl);
+		toast.show();
+	}
+};

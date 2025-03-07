@@ -13,21 +13,30 @@ namespace Ticket.API.Services
 			_context = context;
 		}
 
-		public void Save(ReserveTicketModel model)
+		public bool Save(ReserveTicketModel model)
 		{
-			var ticketEntity = new TicketReservation
+			if (string.IsNullOrEmpty(model.Email) && string.IsNullOrEmpty(model.PhoneNumber))
 			{
-				Name = model.Name,
-				Email = model.Email,
-				PhoneNumber = model.Phone,
-				IsStudent = model.IsStudent,
-				NumberOfTickets = model.Tickets,
-				ContactedBy = model.ContactedBy,
-				Comments = model.Comments
-			};
+				return false;
+			}
+			else
+			{
+				var ticketEntity = new TicketReservation
+				{
+					Name = model.Name,
+					Email = model.Email,
+					PhoneNumber = model.PhoneNumber,
+					IsStudent = model.IsStudent,
+					NumberOfTickets = model.Tickets,
+					ContactedBy = model.ContactedBy,
+					Comments = model.Comments
+				};
 
-			_context.TicketReservation.Add(ticketEntity);
-			_context.SaveChanges();
+				_context.TicketReservation.Add(ticketEntity);
+				_context.SaveChanges();
+
+				return true;
+			}
 		}
 
 		public List<string> GetAllLookupContacts()

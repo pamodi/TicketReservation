@@ -16,6 +16,15 @@
         </div>
     </div>
 
+    <div class="position-fixed top-0 end-0 p-3" style="z-index: 1050;">
+        <div id="errorToast" class="toast align-items-center text-white bg-danger border-0 shadow-lg" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="3000">
+            <div class="d-flex">
+                <div class="toast-body fw-bold">❕ Please provide either an email address or phone number!</div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        </div>
+    </div>
+
     <!-- Ticket Reservation Form -->
     <div class="container-fluid p-0 d-flex flex-column align-items-center justify-content-center mt-3">
         <div class="container d-flex align-items-center justify-content-center">
@@ -56,19 +65,18 @@
                                         <label class="form-label">Phone Number</label>
                                     </div>
                                     <div class="col-md-8">
-                                        <InputText id="phoneInput" type="tel" class="form-control" @bind-Value="reserveTicketModel.Phone" />
-                                        <ValidationMessage For="() => reserveTicketModel.Phone" class="text-danger" />
+                                        <InputText id="phoneInput" type="tel" class="form-control" @bind-Value="reserveTicketModel.PhoneNumber" />
+                                        <ValidationMessage For="() => reserveTicketModel.PhoneNumber" class="text-danger" />
                                     </div>
                                 </div>
 
-                                @if (string.IsNullOrEmpty(reserveTicketModel.Email) && string.IsNullOrEmpty(reserveTicketModel.Phone))
+                                @if (string.IsNullOrEmpty(reserveTicketModel.Email) && string.IsNullOrEmpty(reserveTicketModel.PhoneNumber))
                                 {
                                     <div class="row mt-2">
                                         <small class="text-muted d-block mt-1">
                                             ℹ️ Please provide either email or phone number.
                                         </small>
                                     </div>
-
                                 }
 
                                 <div class="row mt-2">
@@ -294,12 +302,18 @@
                 StateHasChanged();
                 await JS.InvokeVoidAsync("showToast");
             }
-            isSubmitting = false;
+            else
+            {
+                isSubmitting = false;
+                StateHasChanged();
+                await JS.InvokeVoidAsync("showErrorToast");
+            }
         }
         catch (Exception ex)
         {
             var errorMessage = "An error occurred: " + ex.Message;
         }
+        isSubmitting = false;
         // NavigationManager.NavigateTo($"/");
     }
 
