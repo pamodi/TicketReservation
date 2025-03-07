@@ -17,20 +17,23 @@
     </div>
 
     <!-- Ticket Reservation Form -->
-    <div class="container-fluid p-0 d-flex flex-column align-items-center justify-content-center">
+    <div class="container-fluid p-0 d-flex flex-column align-items-center justify-content-center mt-3">
         <div class="container d-flex align-items-center justify-content-center">
-            <div class="row w-100">
+            <div class="row w-100 gy-4">
+                <div style="margin-left:auto" class="col-lg-4 d-lg-flex align-items-center justify-content-center animate__animated animate__fadeInLeft reserve-img">
+                    <img src="/assets/img1.jpeg" alt="Get Together 2025" class="img-fluid" />
+                </div>
 
                 <!-- Ticket Reservation Form -->
-                <div class="col-lg-6 col-md-8 mx-auto">
+                <div class="col-lg-6 col-md-8 mx-auto" style="margin-right:auto">
                     <div class="card shadow-lg p-2 animate__animated animate__fadeInDown form-card">
                         <div class="card-body">
-                            <h3 class="card-title text-center mb-4 fw-bold"><i class="fas fa-clipboard-check"></i> Reserve Your Tickets</h3>
+                            <h3 class="card-title text-center mb-4 fw-bold">🎟️ Reserve Your Tickets</h3>
                             <EditForm Model="@reserveTicketModel" OnValidSubmit="HandleSubmit">
                                 <DataAnnotationsValidator />
                                 <div class="row">
                                     <div class="col-md-4">
-                                        <label class="form-label fw-bold">Full Name <span class="text-danger">*</span></label>
+                                        <label class="form-label">Full Name <span class="text-danger">*</span></label>
                                     </div>
                                     <div class="col-md-8">
                                         <InputText class="form-control" @bind-Value="reserveTicketModel.Name" />
@@ -40,7 +43,7 @@
 
                                 <div class="row mt-2">
                                     <div class="col-md-4">
-                                        <label class="form-label fw-bold">Email Address</label>
+                                        <label class="form-label">Email Address</label>
                                     </div>
                                     <div class="col-md-8">
                                         <InputText type="email" class="form-control" @bind-Value="reserveTicketModel.Email" />
@@ -50,7 +53,7 @@
 
                                 <div class="row mt-2">
                                     <div class="col-md-4">
-                                        <label class="form-label fw-bold">Phone Number</label>
+                                        <label class="form-label">Phone Number</label>
                                     </div>
                                     <div class="col-md-8">
                                         <InputText id="phoneInput" type="tel" class="form-control" @bind-Value="reserveTicketModel.Phone" />
@@ -61,16 +64,16 @@
                                 @if (string.IsNullOrEmpty(reserveTicketModel.Email) && string.IsNullOrEmpty(reserveTicketModel.Phone))
                                 {
                                     <div class="row mt-2">
-                                        <small class="text-muted d-block mt-1 fw-bold">
-                                            📢 If you haven't provided an email, you must enter a phone number.
+                                        <small class="text-muted d-block mt-1">
+                                            ℹ️ Please provide either email or phone number.
                                         </small>
                                     </div>
-                                    
+
                                 }
 
                                 <div class="row mt-2">
                                     <div class="col-md-4">
-                                        <label class="form-check-label fw-bold">Are you a student?</label>
+                                        <label class="form-check-label">Are you a student?</label>
                                     </div>
                                     <div class="col-md-8 d-flex">
                                         <InputCheckbox class="form-check-input me-2" @bind-Value="reserveTicketModel.IsStudent" />
@@ -80,7 +83,7 @@
 
                                 <div class="row mt-3">
                                     <div class="col-md-4">
-                                        <label class="form-label fw-bold">Number of Tickets <span class="text-danger">*</span></label>
+                                        <label class="form-label">Number of Tickets <span class="text-danger">*</span></label>
                                     </div>
                                     <div class="col-md-8">
                                         <InputNumber class="form-control" @bind-Value="reserveTicketModel.Tickets" min="1" max="150" />
@@ -90,7 +93,7 @@
 
                                 <div class="row mt-2">
                                     <div class="col-md-4">
-                                        <label class="form-label fw-bold">Contacted By</label>
+                                        <label class="form-label">Contacted By</label>
                                     </div>
                                     <div class="col-md-8">
                                         <InputText class="form-control" list="contactedByOptions" @bind-Value="reserveTicketModel.ContactedBy" />
@@ -105,7 +108,7 @@
 
                                 <div class="row mt-2">
                                     <div class="col-md-4">
-                                        <label class="form-label fw-bold">Comments</label>
+                                        <label class="form-label">Comments</label>
                                     </div>
                                     <div class="col-md-8">
                                         <InputTextArea class="form-control" @bind-Value="reserveTicketModel.Comments" rows="3" />
@@ -113,19 +116,17 @@
                                 </div>
 
                                 <div class="important-notice p-2 mt-3 rounded text-center">
-                                    <em>🔒 Your privacy is our priority. Your information will remain confidential and will never be shared with third parties</em>
+                                    🔒 Your privacy is our priority. Your information will remain confidential and will never be shared with third parties
                                 </div>
 
                                 <div class="d-flex flex-column flex-md-row justify-content-center mt-3 gap-3">
-                                    <button type="submit" disabled="@(isSubmitting)" class="btn btn-gold w-100 w-md-auto">🎟 Reserve</button>
+                                    <button type="submit" disabled="@(isSubmitting)" class="btn btn-gold w-100 w-md-auto">🎟️ Reserve</button>
                                     <button type="button" disabled="@(isSubmitting)" class="btn btn-secondary w-100 w-md-auto fw-bold" @onclick="onCancelClick">❌ Cancel</button>
                                 </div>
                             </EditForm>
                         </div>
                     </div>
                 </div>
-
-                <div class="col-lg-4 d-none d-lg-flex align-items-center justify-content-center animate__animated animate__fadeInRight right-img"></div>
             </div>
         </div>
     </div>
@@ -141,32 +142,8 @@
         backdrop-filter: blur(10px);
     }
 
-    .overlay {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.6);
-    }
-
-    body {
-        background: linear-gradient(135deg, #2c2c2c 30%, #6b0000 50%, #d4af37 90%);
-        color: #fff;
-        margin: 0;
-        min-height: 100vh;
-        display: flex;
-        flex-direction: column;
-    }
-
-    .container-fluid {
-        flex-grow: 1;
-        padding: 0;
-    }
-
-    .content {
-        position: relative;
-        z-index: 1;
+    .text-danger {
+        color: darkred !important;
     }
 
     .form-container {
@@ -181,31 +158,18 @@
         font-size: small;
     }
 
-    .btn-dark-gray {
-        background: #343a40;
-        color: white;
-        font-weight: bold;
-        border: none;
-        transition: all 0.3s ease-in-out;
-    }
-
-        .btn-dark-gray:hover {
-            background: #2c2c2c;
-            color: #ffff;
-        }
-
     .form-control {
         border-radius: 5px;
         border: 1px solid gray;
         padding: 6px;
         transition: all 0.3s;
         border-color: #d3d3d361;
-        background-color: #6e6a6a4d;
+        background-color: #ffffff8f;
     }
 
         .form-control:focus {
             border-color: #ffef00a8;
-            box-shadow: 0px 0px 10px #dfd49c;
+            box-shadow: 0px 0px 10px #ffffff8f;
         }
 
     .form-check-input {
@@ -214,17 +178,15 @@
         padding: 6px;
         transition: all 0.3s;
         border-color: #d3d3d361;
-        background-color: #6e6a6a4d;
+        background-color: #ffffff8f;
     }
 
-    .right-img {
-        background: linear-gradient(135deg, #2c2c2c 30%, #6b0000 50%, #d4af37 90%); /* Same as body */
+    .reserve-img {
         position: relative;
         border-radius: 8px;
     }
 
-        /* Once the image is loaded, it will override the background */
-        .right-img::after {
+        .reserve-img::after {
             content: "";
             position: absolute;
             top: 0;
@@ -240,18 +202,21 @@
         background: linear-gradient(135deg, #d4af37, #b8860b);
         color: white;
         font-weight: bold;
-        border: none;
-        transition: all 0.3s ease-in-out;
     }
 
         .btn-gold:hover {
             background: linear-gradient(135deg, #b8860b, #8b6508);
             color: #fff;
+            border-color: #ffffff8f;
         }
 
     .btn-secondary {
         background-color: #6971799c;
     }
+
+        .btn-secondary:hover {
+            border-color: #fff;
+        }
 
     .media (max-width: 768px) {
         .container-fluid {
@@ -276,8 +241,11 @@
             width: 100%;
         }
 
-        .right-img {
-            display: none; /* Hide the right image on mobile */
+    .reserve-img {
+            display: block; /* Make the image visible on mobile */
+            background-size: cover; /* Ensure the image covers the container */
+            height: 200px;
+            width: 200px;
         }
 
         .important-notice {

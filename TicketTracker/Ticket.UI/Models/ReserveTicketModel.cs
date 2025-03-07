@@ -4,7 +4,7 @@ namespace Ticket.UI.Models
 {
 	public class ReserveTicketModel
 	{
-		[Required(ErrorMessage = "Name is required.")]
+		[Required(ErrorMessage = "Please enter your name.")]
 		public string Name { get; set; } = "";
 
 		[RequiredIfEmpty(nameof(Phone), ErrorMessage = "Either Email or Phone must be provided.")]

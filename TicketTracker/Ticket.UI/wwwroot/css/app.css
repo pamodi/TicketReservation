@@ -1,5 +1,11 @@
 html, body {
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-family: "Segoe UI SemiLight" !important;
+    background: linear-gradient(135deg, #2c2c2c 30%, #6b0000 50%, #d4af37 90%);
+    color: white;
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
 h1:focus {
@@ -18,10 +24,6 @@ a, .btn-link {
 
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
   box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
-
-.content {
-    padding-top: 1.1rem;
 }
 
 .valid.modified:not([type=checkbox]) {
@@ -111,4 +113,105 @@ code {
 
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
     text-align: start;
+}
+
+.content {
+    padding-top: 1.0rem;
+    position: relative;
+    z-index: 1;
+}
+
+.container-fluid {
+    flex-grow: 1;
+    padding: 0;
+}
+
+.hero-section {
+    height: 300px;
+    background: url('/assets/banner2.jpg') no-repeat center center/cover;
+    position: relative;
+    padding: 20px;
+}
+
+.btn-secondary {
+    background-color: #6971799c;
+}
+
+    .btn-secondary:hover {
+        border-color: #fff;
+    }
+
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+}
+
+
+.media (max-width: 768px) {
+    .hero-section {
+        height: 200px;
+        overflow: auto;
+     }
+
+    .hero-section .content {
+        overflow: auto;
+    }
+}
+
+
+.loading-container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+
+.loading-ring {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    border: 5px solid transparent;
+    border-top: 5px solid #d4af37; /* Gold */
+    border-bottom: 5px solid #b8860b;
+    animation: spin 1.2s linear infinite, glow 1.5s ease-in-out infinite alternate;
+}
+
+@keyframes spin {
+    100% { transform: rotate(360deg); }
+}
+
+@keyframes glow {
+    0% { box-shadow: 0 0 10px #d4af37; }
+    100% { box-shadow: 0 0 20px #ffcc00; }
+}
+
+.loading-icon {
+    font-size: 40px;
+    margin-top: -65px;
+    color: rgba(255, 215, 0, 0.8);
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+    animation: pulse 1.5s infinite alternate;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); opacity: 0.7; }
+    100% { transform: scale(1.2); opacity: 1; }
+}
+
+.loading-text {
+    font-size: 18px;
+    font-weight: bold;
+    color: #fff;
+    margin-top: 10px;
+    animation: fadeIn 1.5s infinite alternate;
+}
+
+@keyframes fadeIn {
+    0% { opacity: 0.5; }
+    100% { opacity: 1; }
 }
