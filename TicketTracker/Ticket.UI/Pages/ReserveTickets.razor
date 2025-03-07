@@ -56,7 +56,6 @@
                                     </div>
                                     <div class="col-md-8">
                                         <InputText type="email" class="form-control" @bind-Value="reserveTicketModel.Email" />
-                                        <ValidationMessage For="() => reserveTicketModel.Email" class="text-danger" />
                                     </div>
                                 </div>
 
@@ -66,7 +65,6 @@
                                     </div>
                                     <div class="col-md-8">
                                         <InputText id="phoneInput" type="tel" class="form-control" @bind-Value="reserveTicketModel.PhoneNumber" />
-                                        <ValidationMessage For="() => reserveTicketModel.PhoneNumber" class="text-danger" />
                                     </div>
                                 </div>
 
@@ -277,13 +275,13 @@
         await FetchLookupContacts();
     }
 
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (firstRender)
-        {
-            await JS.InvokeVoidAsync("applyPhoneMask");
-        }
-    }
+    // protected override async Task OnAfterRenderAsync(bool firstRender)
+    // {
+    //     if (firstRender)
+    //     {
+    //         await JS.InvokeVoidAsync("applyPhoneMask");
+    //     }
+    // }
 
     private async Task FetchLookupContacts()
     {

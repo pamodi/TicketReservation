@@ -17,3 +17,9 @@ window.showErrorToast = () => {
 		toast.show();
 	}
 };
+
+window.restrictPhoneInput = () => {
+	document.getElementById('phoneInput').addEventListener('input', function (e) {
+		this.value = this.value.replace(/\D/g, ''); // Remove non-numeric characters
+	});
+};
