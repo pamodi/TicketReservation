@@ -10,7 +10,7 @@
     <div class="position-fixed top-0 end-0 p-3" style="z-index: 1050;">
         <div id="successToast" class="toast align-items-center text-white bg-success border-0 shadow-lg" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="3000">
             <div class="d-flex">
-                <div class="toast-body fw-bold">✅ Your reservation was successful!</div>
+                <div class="toast-body fw-bold">✅ Successfully reserved your tickets!</div>
                 <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
             </div>
         </div>
@@ -21,7 +21,7 @@
         <div class="container d-flex align-items-center justify-content-center">
             <div class="row w-100 gy-4">
                 <div style="margin-left:auto" class="col-lg-4 d-lg-flex align-items-center justify-content-center animate__animated animate__fadeInLeft reserve-img">
-                    <img src="/assets/img1.jpeg" alt="Get Together 2025" class="img-fluid" />
+                    <img src="/assets/image.jpg" alt="Get Together 2025" class="img-fluid" />
                 </div>
 
                 <!-- Ticket Reservation Form -->
@@ -300,7 +300,7 @@
         {
             var errorMessage = "An error occurred: " + ex.Message;
         }
-        NavigationManager.NavigateTo($"/");
+        // NavigationManager.NavigateTo($"/");
     }
 
     protected async Task onCancelClick()
