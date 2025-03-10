@@ -18,6 +18,14 @@ window.showErrorToast = () => {
 	}
 };
 
+window.showPhoneErrorToast = () => {
+	let toastEl = document.getElementById('phoneErrorToast');
+	if (toastEl) {
+		let toast = new bootstrap.Toast(toastEl);
+		toast.show();
+	}
+};
+
 window.restrictPhoneInput = () => {
 	document.getElementById('phoneInput').addEventListener('input', function (e) {
 		this.value = this.value.replace(/\D/g, ''); // Remove non-numeric characters

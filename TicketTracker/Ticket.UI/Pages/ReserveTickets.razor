@@ -25,12 +25,21 @@
         </div>
     </div>
 
+    <div class="position-fixed top-0 end-0 p-3" style="z-index: 1050;">
+        <div id="phoneErrorToast" class="toast align-items-center text-white bg-danger border-0 shadow-lg" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="3000">
+            <div class="d-flex">
+                <div class="toast-body fw-bold">❕ Please provide a valid Phone Number!</div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        </div>
+    </div>
+
     <!-- Ticket Reservation Form -->
     <div class="container-fluid p-0 d-flex flex-column align-items-center justify-content-center mt-3">
         <div class="container d-flex align-items-center justify-content-center">
             <div class="row w-100 gy-4">
                 <div style="margin-left:auto" class="col-lg-4 d-lg-flex align-items-center justify-content-center animate__animated animate__fadeInLeft reserve-img">
-                    <img src="/assets/image.jpg" alt="Get Together 2025" class="img-fluid" />
+                    <img src="/assets/image.png" alt="Maroons Eve 2025" class="img-fluid" />
                 </div>
 
                 <!-- Ticket Reservation Form -->
@@ -190,18 +199,15 @@
     .reserve-img {
         position: relative;
         border-radius: 8px;
+        background-size: 100% 100%;
     }
 
         .reserve-img::after {
             content: "";
-            position: absolute;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
-            background: url('/assets/img1.jpeg') no-repeat center center/cover;
+            background: url('/assets/image.png');
             border-radius: 8px;
-            animation: fadeIn 1s ease-in-out;
         }
 
     .btn-gold {
@@ -247,7 +253,7 @@
             width: 100%;
         }
 
-    .reserve-img {
+        .reserve-img {
             display: block; /* Make the image visible on mobile */
             background-size: cover; /* Ensure the image covers the container */
             height: 200px;
@@ -290,6 +296,12 @@
 
     private async Task HandleSubmit()
     {
+        if (!IsPhoneNumberValid(reserveTicketModel.PhoneNumber))
+        {
+            await JS.InvokeVoidAsync("showPhoneErrorToast");
+            return;
+        }
+
         try
         {
             isSubmitting = true;
@@ -318,5 +330,10 @@
     protected async Task onCancelClick()
     {
         NavigationManager.NavigateTo($"/");
+    }
+
+    private bool IsPhoneNumberValid(string phoneNumber)
+    {
+        return phoneNumber.All(char.IsDigit);
     }
 }

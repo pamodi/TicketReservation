@@ -127,10 +127,9 @@ code {
 }
 
 .hero-section {
-    height: 320px;
-    background: url('/assets/banner.jpg') no-repeat center center/cover;
-    position: relative;
-    padding: 20px;
+    height: 400px;
+    background: url('/assets/banner.jpeg');
+    background-size: 100% 100%;
 }
 
 .btn-secondary {
@@ -150,30 +149,23 @@ code {
     background: rgba(0, 0, 0, 0.6);
 }
 
-
-@media (max-width: 1170px) {
+@media (max-width: 1388px) {
     .hero-section {
         height: 300px;
-        background: url('/assets/banner-mobile-1.jpg') no-repeat center center/cover;
-        overflow-x: scroll;
-        overflow-y: scroll;
-    }
-
-    .hero-section .content {
-        overflow: auto;
-    }
-}
-
-@media (max-width: 954px) {
-    .hero-section {
-        height: 300px;
-        background: url('/assets/banner-mobile-2.png') no-repeat center center/cover;
-        overflow-x: scroll;
-        overflow-y: scroll;
     }
 
         .hero-section .content {
-            overflow: auto;
+            overflow: scroll;
+        }
+}
+
+@media (max-width: 768px) {
+    .hero-section {
+        height: 200px;
+    }
+
+        .hero-section .content {
+            overflow: scroll;
         }
 }
 
