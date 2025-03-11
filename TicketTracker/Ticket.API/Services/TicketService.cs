@@ -22,11 +22,13 @@ namespace Ticket.API.Services
 			}
 			else
 			{
+				string formattedNumber = FormatPhoneNumber(model.PhoneNumber);
+
 				var ticketEntity = new TicketReservation
 				{
 					Name = model.Name,
 					Email = model.Email,
-					PhoneNumber = model.PhoneNumber,
+					PhoneNumber = formattedNumber,
 					IsStudent = model.IsStudent,
 					NumberOfTickets = model.Tickets,
 					ContactedBy = model.ContactedBy,
@@ -38,6 +40,19 @@ namespace Ticket.API.Services
 
 				return true;
 			}
+		}
+
+		public static string FormatPhoneNumber(string phoneNumber)
+		{
+			if (phoneNumber == null)
+				return string.Empty;
+
+			string digits = new string(phoneNumber.Where(char.IsDigit).ToArray());
+
+			if (digits.Length == 10)
+				return $"({digits.Substring(0, 3)})-{digits.Substring(3, 3)}-{digits.Substring(6, 4)}";
+
+			return phoneNumber; // Return original if not 10 digits
 		}
 
 		public List<string> GetAllLookupContacts()
