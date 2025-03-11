@@ -1,0 +1,187 @@
+﻿@page "/reservations"
+
+@inject IConfiguration Configuration
+@inject HttpClient Http
+
+<PageTitle>Ticket Reservations</PageTitle>
+
+@if (isLoading)
+{
+    <div class="text-center mt-5">
+        <div class="spinner-border text-warning" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+        <p style="color:white">🎟️ Loading...</p>
+    </div>
+}
+else
+{
+    <div class="container-fluid p-0 d-flex flex-column align-items-center justify-content-center mt-1 pt-0">
+        <div class="card shadow-lg animate__animated animate__fadeIn form-card">
+            <div class="card-body">
+                <h2 class="text-center mb-4 animate__animated animate__fadeInDown">🎟 Ticket Reservations</h2>
+
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <input type="text" @bind="searchQuery" @oninput="OnSearch" class="form-control search-box" placeholder="🔍 Search..." />
+                    <div class="d-flex align-items-center">
+                        <span class="me-2" style="color:white">Records per page:</span>
+                        <select class="form-select w-auto" @bind="pageSize" @bind:event="onchange">
+                            <option value="5">5</option>
+                            <option value="10">10</option>
+                            <option value="20">20</option>
+                            <option value="50">50</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Phone</th>
+                                <th>Tickets</th>
+                                <th>Student</th>
+                                <th>Contacted By</th>
+                                <th>Comments</th>
+                                <th>Reserved On</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var res in PaginatedReservations)
+                            {
+                                <tr>
+                                    <td>@res.Name</td>
+                                    <td>@res.Email</td>
+                                    <td>@res.PhoneNumber</td>
+                                    <td>@res.Tickets</td>
+                                    <td>
+                                        <div class="form-check form-switch">
+                                            <input type="checkbox" role="switch" checked="@res.IsStudent" disabled class="form-check-input" />
+                                        </div>
+                                    </td>
+                                    <td>@res.ContactedBy</td>
+                                    <td>
+                                        <span title="@res.Comments">@GetShortComment(res.Comments)</span>
+                                    </td>
+                                    <td>@res.CreatedAt.DateTime.ToString("yyyy/MM/dd")</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="d-flex justify-content-center mt-3">
+                    <button class="btn btn-secondary mx-2" @onclick="PrevPage" disabled="@(currentPage == 1)">⬅ Previous</button>
+                    <span class="align-self-center">Page @currentPage of @totalPages</span>
+                    <button class="btn btn-secondary mx-2" @onclick="NextPage" disabled="@(currentPage == totalPages)">Next ➡</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .form-card {
+            background: rgba(173, 168, 168, 0.5);
+            border-radius: 8px;
+            backdrop-filter: blur(10px);
+            width: inherit;
+        }
+
+        .search-box {
+            max-width: 300px;
+        }
+
+        .form-check-input {
+            pointer-events: none;
+        }
+
+        .table-responsive {
+            max-height: 500px;
+            overflow-y: auto;
+            border-radius: 10px;
+        }
+    </style>
+}
+
+@code {
+    private string searchQuery = "";
+    private bool isAscending = true;
+    private string sortedColumn = "Name";
+    private List<ReservationsModel> reservations = new();
+    private List<ReservationsModel> filteredReservations = new();
+    private bool isLoading = true;
+    private string WebApiAddress => Configuration["WebApiAddress"];
+
+    // Pagination variables
+    private int currentPage = 1;
+    private int pageSize = 10;
+    private int totalPages => Math.Max(1, (int)Math.Ceiling((double)filteredReservations.Count / pageSize));
+
+    private IEnumerable<ReservationsModel> PaginatedReservations =>
+        filteredReservations.Skip((currentPage - 1) * pageSize).Take(pageSize);
+
+    protected override async Task OnInitializedAsync() => await LoadUsersAsync();
+
+    private async Task LoadUsersAsync()
+    {
+        isLoading = true;
+        var result = await Http.GetFromJsonAsync<List<ReservationsModel>>($"{WebApiAddress}/api/ticket/reservations");
+        reservations = result ?? new List<ReservationsModel>();
+        filteredReservations = reservations;
+        isLoading = false;
+        currentPage = 1;
+    }
+
+    private void OnSearch(ChangeEventArgs e)
+    {
+        searchQuery = e.Value?.ToString() ?? "";
+        filteredReservations = reservations
+            .Where(item => item.Name.Contains(searchQuery, StringComparison.OrdinalIgnoreCase)
+            || (!string.IsNullOrEmpty(item.Email) && item.Email.Contains(searchQuery, StringComparison.OrdinalIgnoreCase))
+            || (!string.IsNullOrEmpty(item.PhoneNumber) && item.PhoneNumber.Contains(searchQuery, StringComparison.OrdinalIgnoreCase))
+            || (!string.IsNullOrEmpty(item.ContactedBy) && item.ContactedBy.Contains(searchQuery, StringComparison.OrdinalIgnoreCase))
+            || (!string.IsNullOrEmpty(item.Comments) && item.Comments.Contains(searchQuery, StringComparison.OrdinalIgnoreCase)))
+            .ToList();
+        currentPage = 1; // Reset pagination on search
+    }
+
+    private void NextPage()
+    {
+        if (currentPage < totalPages)
+            currentPage++;
+    }
+
+    private void PrevPage()
+    {
+        if (currentPage > 1)
+            currentPage--;
+
+        StateHasChanged();
+    }
+
+    private void GoToPage(int page)
+    {
+        if (page >= 1 && page <= totalPages)
+        {
+            currentPage = page;
+            StateHasChanged(); // Ensure UI updates
+        }
+    }
+
+    private void OnPageSizeChange(ChangeEventArgs e)
+    {
+        pageSize = int.Parse(e.Value.ToString());
+        currentPage = 1;
+        StateHasChanged();
+    }
+
+    private string GetShortComment(string? comment)
+    {
+        if (string.IsNullOrEmpty(comment))
+            return string.Empty;
+
+        return comment.Length > 20 ? comment.Substring(0, 10) + "..." : comment;
+    }
+}
