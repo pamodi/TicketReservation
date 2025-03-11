@@ -19,7 +19,7 @@
     <div class="position-fixed top-0 end-0 p-3" style="z-index: 1050;">
         <div id="errorToast" class="toast align-items-center text-white bg-danger border-0 shadow-lg" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="3000">
             <div class="d-flex">
-                <div class="toast-body fw-bold">❕ Please provide either an email address or phone number!</div>
+                <div class="toast-body fw-bold">❕ Please provide email address and phone number!</div>
                 <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
             </div>
         </div>
@@ -61,30 +61,32 @@
 
                                 <div class="row mt-2">
                                     <div class="col-md-4">
-                                        <label class="form-label">Email Address</label>
+                                        <label class="form-label">Email Address <span class="text-danger">*</span></label>
                                     </div>
                                     <div class="col-md-8">
                                         <InputText type="email" class="form-control" @bind-Value="reserveTicketModel.Email" />
+                                        <ValidationMessage For="() => reserveTicketModel.Email" class="text-danger" />
                                     </div>
                                 </div>
 
                                 <div class="row mt-2">
                                     <div class="col-md-4">
-                                        <label class="form-label">Phone Number</label>
+                                        <label class="form-label">Phone Number <span class="text-danger">*</span></label>
                                     </div>
                                     <div class="col-md-8">
                                         <InputText id="phoneInput" type="tel" class="form-control" @bind-Value="reserveTicketModel.PhoneNumber" />
+                                        <ValidationMessage For="() => reserveTicketModel.PhoneNumber" class="text-danger" />
                                     </div>
                                 </div>
 
-                                @if (string.IsNullOrEmpty(reserveTicketModel.Email) && string.IsNullOrEmpty(reserveTicketModel.PhoneNumber))
-                                {
-                                    <div class="row mt-2">
-                                        <small class="text-muted d-block mt-1">
-                                            ℹ️ Please provide either email or phone number.
-                                        </small>
-                                    </div>
-                                }
+                                @* @if (string.IsNullOrEmpty(reserveTicketModel.Email) && string.IsNullOrEmpty(reserveTicketModel.PhoneNumber)) *@
+                                @* { *@
+                                @*     <div class="row mt-2"> *@
+                                @*         <small class="text-muted d-block mt-1"> *@
+                                @*             ℹ️ Please provide either email or phone number. *@
+                                @*         </small> *@
+                                @*     </div> *@
+                                @* } *@
 
                                 <div class="row mt-2">
                                     <div class="col-md-4">

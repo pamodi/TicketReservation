@@ -8,9 +8,11 @@ namespace Ticket.UI.Models
 		public string Name { get; set; } = "";
 
 		//[RequiredIfEmpty(nameof(PhoneNumber), ErrorMessage = "Either Email or Phone must be provided.")]
+		[Required(ErrorMessage = "Please enter your email.")]
 		public string Email { get; set; } = "";
 
 		//[RequiredIfEmpty(nameof(Email), ErrorMessage = "Either Phone or Email must be provided.")]
+		[Required(ErrorMessage = "Please enter your phone number.")]
 		public string PhoneNumber { get; set; } = "";
 
 		public bool IsStudent { get; set; } = false;
@@ -22,6 +24,27 @@ namespace Ticket.UI.Models
 		public string? ContactedBy { get; set; }
 
 		public string? Comments { get; set; }
+	}
+
+	public class ReservationsModel
+	{
+		public int Id { get; set; }
+
+		public string Name { get; set; }
+
+		public string? Email { get; set; }
+
+		public string? PhoneNumber { get; set; }
+
+		public bool IsStudent { get; set; }
+
+		public int Tickets { get; set; }
+
+		public string? ContactedBy { get; set; }
+
+		public string? Comments { get; set; }
+
+		public DateTimeOffset CreatedAt { get; set; }
 	}
 
 	public class RequiredIfEmptyAttribute : ValidationAttribute

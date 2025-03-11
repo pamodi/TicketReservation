@@ -8,9 +8,11 @@ namespace Ticket.API.Models
 		public string Name { get; set; } = "";
 
 		//[RequiredIfEmpty(nameof(PhoneNumber), ErrorMessage = "Either Email or Phone must be provided.")]
+		[Required(ErrorMessage = "Please enter your email.")]
 		public string Email { get; set; } = "";
 
 		//[RequiredIfEmpty(nameof(Email), ErrorMessage = "Either Phone or Email must be provided.")]
+		[Required(ErrorMessage = "Please enter your phone number.")]
 		public string PhoneNumber { get; set; } = "";
 
 		public bool IsStudent { get; set; } = false;
