@@ -1,5 +1,5 @@
 html, body {
-    font-family: "Segoe UI SemiLight" !important;
+    font-family: "Segoe UI SemiLight", "Segoe UI", 'Roboto', sans-serif !important;
     background: linear-gradient(135deg, #2c2c2c 30%, #6b0000 50%, #d4af37 90%);
     color: white;
     margin: 0;
