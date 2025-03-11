@@ -1,4 +1,5 @@
-﻿using Ticket.API.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using Ticket.API.Data;
 using Ticket.API.Entity;
 using Ticket.API.Models;
 
@@ -42,6 +43,24 @@ namespace Ticket.API.Services
 		public List<string> GetAllLookupContacts()
 		{
 			return _context.LookupContactedBy.Select(q => q.Name).ToList();
+		}
+
+		public async Task<IEnumerable<ReservationsModel>> GetAllReservations()
+		{
+			return await _context.TicketReservation
+								 .Where(u => !u.IsDeleted)
+								 .Select(q => new ReservationsModel()
+								 {
+									 Id = q.Id,
+									 Name = q.Name,
+									 Email = q.Email,
+									 PhoneNumber = q.PhoneNumber,
+									 IsStudent = q.IsStudent,
+									 Tickets = q.NumberOfTickets,
+									 ContactedBy = q.ContactedBy,
+									 Comments = q.Comments,
+									 CreatedAt = q.CreatedAt
+								 }).ToListAsync();
 		}
 	}
 }
