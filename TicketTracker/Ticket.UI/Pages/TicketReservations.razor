@@ -2,6 +2,8 @@
 
 @inject IConfiguration Configuration
 @inject HttpClient Http
+@using ClosedXML.Excel
+@inject IJSRuntime JS
 
 <PageTitle>Ticket Reservations</PageTitle>
 
@@ -72,10 +74,18 @@ else
                     </table>
                 </div>
 
-                <div class="d-flex justify-content-center mt-3">
-                    <button class="btn btn-secondary mx-2" @onclick="PrevPage" disabled="@(currentPage == 1)">⬅ Previous</button>
-                    <span class="align-self-center">Page @currentPage of @totalPages</span>
-                    <button class="btn btn-secondary mx-2" @onclick="NextPage" disabled="@(currentPage == totalPages)">Next ➡</button>
+                <div class="row d-flex justify-content-between align-items-center mt-3">
+                    <!-- Left-aligned Export Button -->
+                    <div class="col-4">
+                        <button class="btn btn-success" @onclick="ExportToExcel">📥 Export to Excel</button>
+                    </div>
+
+                    <!-- Right-aligned Pagination Buttons -->
+                    <div class="d-flex col-8 justify-content-end">
+                        <button class="btn btn-secondary mx-2" @onclick="PrevPage" disabled="@(currentPage == 1)">⬅ Previous</button>
+                        <span class="align-self-center">Page @currentPage of @totalPages</span>
+                        <button class="btn btn-secondary mx-2" @onclick="NextPage" disabled="@(currentPage == totalPages)">Next ➡</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -184,4 +194,51 @@ else
 
         return comment.Length > 20 ? comment.Substring(0, 10) + "..." : comment;
     }
+
+    private async Task ExportToExcel()
+    {
+        try
+        {
+            using var workbook = new XLWorkbook();
+            var worksheet = workbook.Worksheets.Add("Reservations");
+
+            // Add headers
+            var headers = new string[] { "Name", "Email", "Phone", "Tickets", "Is Student", "Contacted By", "Comments", "Reserved On" };
+            for (int col = 0; col < headers.Length; col++)
+            {
+                worksheet.Cell(1, col + 1).Value = headers[col];
+            }
+
+            // Populate data
+            for (int i = 0; i < filteredReservations.Count; i++)
+            {
+                var res = filteredReservations[i];
+                worksheet.Cell(i + 2, 1).Value = res.Name;
+                worksheet.Cell(i + 2, 2).Value = res.Email;
+                worksheet.Cell(i + 2, 3).Value = res.PhoneNumber;
+                worksheet.Cell(i + 2, 4).Value = res.Tickets;
+                worksheet.Cell(i + 2, 5).Value = res.IsStudent ? "Yes" : "No";
+                worksheet.Cell(i + 2, 6).Value = res.ContactedBy;
+                worksheet.Cell(i + 2, 7).Value = res.Comments;
+                worksheet.Cell(i + 2, 8).Value = res.CreatedAt.DateTime.ToString("yyyy/MM/dd");
+            }
+
+            // Save to memory stream
+            using var stream = new MemoryStream();
+            workbook.SaveAs(stream);
+            var fileName = $"Reservations_{DateTime.Now:yyyyMMdd_HHmmss}.xlsx";
+
+            // Convert to Base64 for download
+            var fileBytes = stream.ToArray();
+            var base64String = Convert.ToBase64String(fileBytes);
+
+            await JS.InvokeVoidAsync("saveAsFile", fileName, base64String);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Error exporting to Excel: " + ex.Message);
+        }
+    }
+
 }
+
