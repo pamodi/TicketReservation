@@ -128,7 +128,7 @@ code {
 
 .hero-section {
     height: 400px;
-    background: url('/assets/banner.jpeg');
+    background: url('/assets/banner.jpg');
     background-size: 100% 100%;
 }
 
@@ -151,7 +151,7 @@ code {
 
 @media (max-width: 1388px) {
     .hero-section {
-        height: 300px;
+        height: 400px;
     }
 
         .hero-section .content {
@@ -161,7 +161,7 @@ code {
 
 @media (max-width: 768px) {
     .hero-section {
-        height: 200px;
+        height: 300px;
     }
 
         .hero-section .content {
