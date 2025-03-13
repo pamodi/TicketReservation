@@ -1,27 +1,119 @@
-﻿
-
-<div class="modal show d-block align-content-center" tabindex="-1" role="dialog" style="background-color: rgba(0, 0, 0, 0.5);">
+﻿<div class="modal show d-block align-content-center" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
+        <div class="modal-content modal-custom">
+            <div class="modal-header modal-header-custom">
                 <h5 class="modal-title">@Title</h5>
                 <button type="button" class="btn-close" aria-label="Close" @onclick="CloseBtnClick"></button>
             </div>
             <div class="modal-body">
                 <p>@BodyText</p>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" @onclick="CloseBtnClick">Cancel</button>
-                @if (!IsDelete) {
+            <div class="modal-footer modal-footer-custom">
+                <button type="button" class="btn btn-cancel" @onclick="CloseBtnClick">Cancel</button>
+                @if (!IsDelete)
+                {
                     <button type="button" class="btn btn-primary" @onclick="OkBtnClick">OK</button>
                 }
-                else {
+                else
+                {
                     <button type="button" class="btn btn-danger" @onclick="DeleteBtnClick">Delete</button>
                 }
             </div>
         </div>
     </div>
 </div>
+
+<style>
+    /* Modal Background */
+    .modal.show {
+        background-color: rgba(0, 0, 0, 0.7); /* Dark overlay */
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1050;
+    }
+
+    /* Modal Content with Gradient (Gray -> Maroon) */
+    .modal-custom {
+        background: linear-gradient(135deg, #808080, #800000); /* Gray -> Maroon */
+        color: white;
+        border-radius: 10px;
+        width: 90%;
+        max-width: 500px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3); /* Adds shadow */
+    }
+
+    /* Modal Header with Gradient */
+    .modal-header-custom {
+        background: linear-gradient(135deg, #808080, #800000); /* Gray -> Maroon */
+        color: #fff;
+        border-bottom: 1px solid #ccc;
+        padding: 16px;
+    }
+
+        .modal-header-custom .btn-close {
+            border: none;
+            background-color: transparent;
+            color: #fff;
+        }
+
+    /* Modal Body */
+    .modal-body {
+        padding: 20px;
+        font-size: 1.1rem;
+    }
+
+    /* Modal Footer with Gradient */
+    .modal-footer-custom {
+        background: linear-gradient(135deg, #808080, #800000); /* Gray -> Maroon */
+        border-top: 1px solid #ccc;
+        padding: 16px;
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+    }
+
+    /* Button Styles */
+    .btn-cancel {
+        background-color: #697179; /* Dark grey */
+        color: white;
+        border-radius: 5px;
+        padding: 8px 16px;
+    }
+
+        .btn-cancel:hover {
+            background-color: #5a5a5a;
+        }
+
+    .btn-primary {
+        background-color: #3498db; /* Blue */
+        color: white;
+        border-radius: 5px;
+        padding: 8px 16px;
+    }
+
+        .btn-primary:hover {
+            background-color: #2980b9;
+        }
+
+    .btn-danger {
+        background-color: #e74c3c; /* Red */
+        color: white;
+        border-radius: 5px;
+        padding: 8px 16px;
+    }
+
+        .btn-danger:hover {
+            background-color: #c0392b;
+        }
+
+
+</style>
 
 @code {
     [Parameter]
