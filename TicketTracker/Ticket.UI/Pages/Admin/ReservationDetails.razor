@@ -1,0 +1,358 @@
+﻿@page "/admin/reservations/{id:int}"
+@page "/admin/reservations/{id:int}/update"
+
+@inject HttpClient Http
+@inject IConfiguration Configuration
+@inject IJSRuntime JS
+@inject NavigationManager NavigationManager
+
+<div class="container-fluid px-0 mt-0">
+    <!-- Toast Notification -->
+    <div class="position-fixed top-0 end-0 p-3" style="z-index: 1050;">
+        <div id="successToast" class="toast align-items-center text-white bg-success border-0 shadow-lg" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="3000">
+            <div class="d-flex">
+                <div class="toast-body fw-bold">✅ Successfully updated the reservation!</div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        </div>
+    </div>
+
+    <div class="position-fixed top-0 end-0 p-3" style="z-index: 1050;">
+        <div id="errorToast" class="toast align-items-center text-white bg-danger border-0 shadow-lg" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="3000">
+            <div class="d-flex">
+                <div class="toast-body fw-bold">❕ Please provide email address and phone number!</div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        </div>
+    </div>
+
+    <div class="position-fixed top-0 end-0 p-3" style="z-index: 1050;">
+        <div id="phoneErrorToast" class="toast align-items-center text-white bg-danger border-0 shadow-lg" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="3000">
+            <div class="d-flex">
+                <div class="toast-body fw-bold">❕ Please provide a valid Phone Number!</div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ticket Reservation Form -->
+    <div class="container-fluid p-0 d-flex flex-column align-items-center justify-content-center mt-3">
+        <div class="container d-flex align-items-center justify-content-center">
+            <div class="row w-100">
+                <!-- Ticket Reservation Form -->
+                <div class="col-lg-6 col-md-8 mx-auto" style="margin-right:auto">
+                    <div class="card shadow-lg p-2 animate__animated animate__fadeInDown form-card">
+                        <div class="card-body">
+                            <h3 class="card-title text-center mb-4 fw-bold">@headerTitle</h3>
+                            <EditForm Model="@reservationDetailsModel" OnValidSubmit="HandleSubmit">
+                                <DataAnnotationsValidator />
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label class="form-label">Full Name <span class="text-danger">*</span></label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <InputText class="form-control" @bind-Value="reservationDetailsModel.Name" disabled="@(!isEditMode)" />
+                                        <ValidationMessage For="() => reservationDetailsModel.Name" class="text-danger" />
+                                    </div>
+                                </div>
+
+                                <div class="row mt-2">
+                                    <div class="col-md-4">
+                                        <label class="form-label">Email Address <span class="text-danger">*</span></label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <InputText type="email" class="form-control" @bind-Value="reservationDetailsModel.Email" disabled="@(!isEditMode)" />
+                                        <ValidationMessage For="() => reservationDetailsModel.Email" class="text-danger" />
+                                    </div>
+                                </div>
+
+                                <div class="row mt-2">
+                                    <div class="col-md-4">
+                                        <label class="form-label">Phone Number <span class="text-danger">*</span></label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <InputText id="phoneInput" type="tel" class="form-control" @bind-Value="reservationDetailsModel.PhoneNumber" disabled="@(!isEditMode)" />
+                                        <ValidationMessage For="() => reservationDetailsModel.PhoneNumber" class="text-danger" />
+                                    </div>
+                                </div>
+
+                                <div class="row mt-2">
+                                    <div class="col-md-4">
+                                        <label class="form-check-label">Are you a student?</label>
+                                    </div>
+                                    <div class="col-md-8 d-flex">
+                                        <InputCheckbox class="form-check-input me-2" @bind-Value="reservationDetailsModel.IsStudent" disabled="@(!isEditMode)" />
+                                        <small class="text-muted d-block">🎓 Students will receive a discount</small>
+                                    </div>
+                                </div>
+
+                                <div class="row mt-3">
+                                    <div class="col-md-4">
+                                        <label class="form-label">Number of Tickets <span class="text-danger">*</span></label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <InputNumber class="form-control" @bind-Value="reservationDetailsModel.Tickets" min="1" max="150" disabled="@(!isEditMode)" />
+                                        <ValidationMessage For="() => reservationDetailsModel.Tickets" class="text-danger" />
+                                    </div>
+                                </div>
+
+                                <div class="row mt-2">
+                                    <div class="col-md-4">
+                                        <label class="form-label">Contacted By</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <InputText class="form-control" list="contactedByOptions" @bind-Value="reservationDetailsModel.ContactedBy" disabled="@(!isEditMode)" />
+                                        <datalist id="contactedByOptions">
+                                            @foreach (var contact in lookupContacts)
+                                            {
+                                                <option value="@contact"></option>
+                                            }
+                                        </datalist>
+                                    </div>
+                                </div>
+
+                                <div class="row mt-2">
+                                    <div class="col-md-4">
+                                        <label class="form-label">Comments</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <InputTextArea class="form-control" @bind-Value="reservationDetailsModel.Comments" rows="3" disabled="@(!isEditMode)" />
+                                    </div>
+                                </div>
+
+                                <div class="row mt-2">
+                                    <div class="col-md-4">
+                                        <label class="form-label">Reserved On</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <InputText type="text" class="form-control" disabled="@(!isEditMode)" />
+                                    </div>
+                                </div>
+
+                                <div class="important-notice p-2 mt-3 rounded text-center">
+                                    🔒 Your privacy is our priority. Your information will remain confidential and will never be shared with third parties
+                                </div>
+
+                                <div class="d-flex flex-column flex-md-row justify-content-center mt-3 gap-3">
+                                    <button type="submit" disabled="@(!isEditMode)" class="btn btn-gold w-100 w-md-auto">@buttonText</button>
+                                    <button type="button" disabled="@(isSubmitting)" class="btn btn-secondary w-100 w-md-auto fw-bold" @onclick="onCancelClick">❌ Cancel</button>
+                                </div>
+                            </EditForm>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .form-card {
+    background: rgba(173, 168, 168, 0.6);
+    border-radius: 8px;
+    padding: 30px;
+    width: 100%;
+    max-width: 600px;
+    backdrop-filter: blur(10px);
+    }
+
+    .text-danger {
+    color: darkred !important;
+    }
+
+    .form-container {
+    backdrop-filter: blur(10px);
+    }
+
+    .important-notice {
+    background: rgba(219, 160, 160, 0.66);
+    color: maroon;
+    border-left: 5px solid gold;
+    font-weight: bold;
+    font-size: small;
+    }
+
+    .form-control {
+    border-radius: 5px;
+    border: 1px solid gray;
+    padding: 6px;
+    transition: all 0.3s;
+    border-color: #d3d3d361;
+    background-color: #ffffff8f;
+    }
+
+    .form-control:focus {
+    border-color: #ffef00a8;
+    box-shadow: 0px 0px 10px #ffffff8f;
+    }
+
+    .form-check-input {
+    border-radius: 5px;
+    border: 1px solid gray;
+    padding: 6px;
+    transition: all 0.3s;
+    border-color: #d3d3d361;
+    background-color: #ffffff8f;
+    }
+
+    .reserve-img {
+    position: relative;
+    border-radius: 8px;
+    background-size: 100% 100%;
+    }
+
+    .reserve-img::after {
+    content: "";
+    top: 0;
+    left: 0;
+    background: url('/assets/image.png');
+    border-radius: 8px;
+    }
+
+    .btn-gold {
+    background: linear-gradient(135deg, #d4af37, #b8860b);
+    color: white;
+    font-weight: bold;
+    }
+
+    .btn-gold:hover {
+    background: linear-gradient(135deg, #b8860b, #8b6508);
+    color: #fff;
+    border-color: #ffffff8f;
+    }
+
+    .btn-secondary {
+    background-color: #6971799c;
+    }
+
+    .btn-secondary:hover {
+    border-color: #fff;
+    }
+
+    .media (max-width: 768px) {
+    .container-fluid
+
+    {
+    padding: 0 10px;
+    }
+
+    .form-card {
+    max-width: 100%;
+    padding: 20px;
+    border-radius: 8px;
+    }
+
+    .btn {
+    width: 100%;
+    }
+
+    .row {
+    flex-direction: column;
+    }
+
+    .col-md-8 {
+    width: 100%;
+    }
+
+    .reserve-img {
+    display: block; /* Make the image visible on mobile */
+    background-size: cover; /* Ensure the image covers the container */
+    height: 200px;
+    width: 200px;
+    }
+
+    .important-notice {
+    font-size: 14px;
+    }
+
+    .toast {
+    width: 90%;
+    }
+
+    }
+</style>
+
+@code {
+    [Parameter] public int id { get; set; }
+    private ReserveTicketModel reserveTicketModel = new();
+    private bool isSubmitting = false;
+    private string WebApiAddress => Configuration["WebApiAddress"];
+    private List<string> lookupContacts = new();
+    private bool isLoading = false;
+    private bool isEditMode = false;
+    private string headerTitle = "🎟️ Reservation Details";
+    private string buttonText = "🎟️ Reserve";
+    public ReservationsModel reservationDetailsModel = new ReservationsModel();
+
+    protected override async Task OnInitializedAsync()
+    {
+        isEditMode = NavigationManager.Uri.EndsWith("/update", StringComparison.OrdinalIgnoreCase);
+
+        headerTitle = isEditMode ? "🎟️ Update Reservation" : "🎟️ Reservation Details";
+        buttonText = isEditMode ? "🎟️ Update" : "🎟️ Reserve";
+
+        isLoading = true;
+
+        await LoadReservationDetailsAsync();
+        await FetchLookupContacts();
+        isLoading = false;
+    }
+
+    private async Task FetchLookupContacts()
+    {
+        lookupContacts = await Http.GetFromJsonAsync<List<string>>($"{WebApiAddress}/api/ticket/lookup/contacts");
+    }
+
+    private async Task LoadReservationDetailsAsync()
+    {
+        reservationDetailsModel = await Http.GetFromJsonAsync<ReservationsModel>($"{WebApiAddress}/api/ticket/reservation/{id}");
+    }
+
+    private async Task HandleSubmit()
+    {
+        if (!IsPhoneNumberValid(reserveTicketModel.PhoneNumber))
+        {
+            await JS.InvokeVoidAsync("showPhoneErrorToast");
+            return;
+        }
+
+        try
+        {
+            isSubmitting = true;
+            StateHasChanged();
+            var response = await Http.PutAsJsonAsync($"{WebApiAddress}/api/ticket/reservation/{id}", reserveTicketModel);
+            if (response.IsSuccessStatusCode)
+            {
+                reserveTicketModel = new();
+                StateHasChanged();
+                await JS.InvokeVoidAsync("showToast");
+            }
+            else
+            {
+                isSubmitting = false;
+                StateHasChanged();
+                await JS.InvokeVoidAsync("showErrorToast");
+            }
+        }
+        catch (Exception ex)
+        {
+            var errorMessage = "An error occurred: " + ex.Message;
+        }
+        isSubmitting = false;
+        // NavigationManager.NavigateTo($"/");
+    }
+
+    protected async Task onCancelClick()
+    {
+        NavigationManager.NavigateTo($"/admin/reservations");
+    }
+
+    private bool IsPhoneNumberValid(string phoneNumber)
+    {
+        string digits = new string(phoneNumber.Where(char.IsDigit).ToArray());
+
+        bool isValid = phoneNumber.All(char.IsDigit) && digits.Length == 10;
+
+        return isValid;
+    }
+}

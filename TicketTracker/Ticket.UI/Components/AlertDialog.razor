@@ -1,0 +1,39 @@
+﻿
+
+<div class="modal show d-block align-content-center" tabindex="-1" role="dialog" style="background-color: rgba(0, 0, 0, 0.5);">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">@Title</h5>
+                <button type="button" class="btn-close" aria-label="Close" @onclick="CloseBtnClick"></button>
+            </div>
+            <div class="modal-body">
+                <p>@BodyText</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" @onclick="CloseBtnClick">Cancel</button>
+                @if (!IsDelete) {
+                    <button type="button" class="btn btn-primary" @onclick="OkBtnClick">OK</button>
+                }
+                else {
+                    <button type="button" class="btn btn-danger" @onclick="DeleteBtnClick">Delete</button>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public string Title { get; set; }
+    [Parameter]
+    public bool IsDelete { get; set; }
+    [Parameter]
+    public string BodyText { get; set; }
+    [Parameter]
+    public EventCallback CloseBtnClick { get; set; }
+    [Parameter]
+    public EventCallback DeleteBtnClick { get; set; }
+    [Parameter]
+    public EventCallback OkBtnClick { get; set; }
+}

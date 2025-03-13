@@ -1,9 +1,10 @@
-﻿@page "/reservations"
+﻿@page "/admin/reservations"
 
 @inject IConfiguration Configuration
 @inject HttpClient Http
 @using ClosedXML.Excel
 @inject IJSRuntime JS
+@inject NavigationManager NavigationManager
 
 <PageTitle>Ticket Reservations</PageTitle>
 
@@ -26,13 +27,9 @@ else
                 <div class="d-flex justify-content-between align-items-center mb-3">
                     <input type="text" @bind="searchQuery" @oninput="OnSearch" class="form-control search-box" placeholder="🔍 Search..." />
                     <div class="d-flex align-items-center">
-                        <span class="me-2" style="color:white">Records per page:</span>
-                        <select class="form-select w-auto" @bind="pageSize" @bind:event="onchange">
-                            <option value="5">5</option>
-                            <option value="10">10</option>
-                            <option value="20">20</option>
-                            <option value="50">50</option>
-                        </select>
+                        <button class="btn btn-sm btn-success me-2" title="Add New Reservation">
+                            <i class="bi bi-plus-circle"></i> ➕ Add New
+                        </button>
                     </div>
                 </div>
 
@@ -46,8 +43,9 @@ else
                                 <th>Tickets</th>
                                 <th>Student</th>
                                 <th>Contacted By</th>
-                                <th>Comments</th>
-                                <th>Reserved On</th>
+                                @* <th>Comments</th> *@
+                                @* <th>Reserved On</th> *@
+                                <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -64,10 +62,29 @@ else
                                         </div>
                                     </td>
                                     <td>@res.ContactedBy</td>
+                                    @* <td> *@
+                                    @*     <span title="@res.Comments">@GetShortComment(res.Comments)</span> *@
+                                    @* </td> *@
+                                    @* <td>@res.CreatedAt.DateTime.ToString("yyyy/MM/dd")</td> *@
                                     <td>
-                                        <span title="@res.Comments">@GetShortComment(res.Comments)</span>
+                                        <div class="d-flex">
+                                            <!-- View More Button -->
+                                            <button class="btn btn-sm btn-primary me-2" title="View More" @onclick="() => NavigateToDetails(res.Id, false)">
+                                                <i class="bi bi-folder-fill"></i> 📂
+                                            </button>
+
+                                            <!-- Update Button -->
+                                            <button class="btn btn-sm btn-warning me-2" title="Update" @onclick="() => NavigateToDetails(res.Id, true)">
+                                                <i class="bi bi-pen-fill"></i> ✏️
+                                            </button>
+
+                                            <!-- Delete Button -->
+                                            <button class="btn btn-sm btn-danger" title="Delete" @onclick="() => ConfirmDelete(res.Id)">
+                                                <i class="bi bi-trash-fill"></i> 🗑️
+                                            </button>
+                                        </div>
                                     </td>
-                                    <td>@res.CreatedAt.DateTime.ToString("yyyy/MM/dd")</td>
+
                                 </tr>
                             }
                         </tbody>
@@ -77,11 +94,20 @@ else
                 <div class="row d-flex justify-content-between align-items-center mt-3">
                     <!-- Left-aligned Export Button -->
                     <div class="col-4">
-                        <button class="btn btn-success" @onclick="ExportToExcel">📥 Export to Excel</button>
+                        <button class="btn btn-success" @onclick="ExportToExcel">📥 Export</button>
                     </div>
 
                     <!-- Right-aligned Pagination Buttons -->
                     <div class="d-flex col-8 justify-content-end">
+                        <div class="d-flex align-items-center">
+                            <span class="me-2" style="color:white">Records per page:</span>
+                            <select class="form-select w-auto" @bind="pageSize" @bind:event="onchange">
+                                <option value="5">5</option>
+                                <option value="10">10</option>
+                                <option value="20">20</option>
+                                <option value="50">50</option>
+                            </select>
+                        </div>
                         <button class="btn btn-secondary mx-2" @onclick="PrevPage" disabled="@(currentPage == 1)">⬅ Previous</button>
                         <span class="align-self-center">Page @currentPage of @totalPages</span>
                         <button class="btn btn-secondary mx-2" @onclick="NextPage" disabled="@(currentPage == totalPages)">Next ➡</button>
@@ -90,6 +116,16 @@ else
             </div>
         </div>
     </div>
+}
+
+<!-- Delete Confirmation Modal -->
+@if (showDeleteModal)
+{
+    <AlertDialog Title="Confirm Delete"
+                 BodyText="Are you sure you want to delete this?"
+                 IsDelete="true"
+                 CloseBtnClick="CancelDelete"
+                 DeleteBtnClick="DeleteAsync" />
 }
 
 <style>
@@ -123,6 +159,8 @@ else
     private List<ReservationsModel> filteredReservations = new();
     private bool isLoading = true;
     private string WebApiAddress => Configuration["WebApiAddress"];
+    private int reservationIdToDelete;
+    private bool showDeleteModal = false;
 
     // Pagination variables
     private int currentPage = 1;
@@ -132,9 +170,9 @@ else
     private IEnumerable<ReservationsModel> PaginatedReservations =>
         filteredReservations.Skip((currentPage - 1) * pageSize).Take(pageSize);
 
-    protected override async Task OnInitializedAsync() => await LoadUsersAsync();
+    protected override async Task OnInitializedAsync() => await LoadReservationsAsync();
 
-    private async Task LoadUsersAsync()
+    private async Task LoadReservationsAsync()
     {
         isLoading = true;
         var result = await Http.GetFromJsonAsync<List<ReservationsModel>>($"{WebApiAddress}/api/ticket/reservations");
@@ -240,5 +278,27 @@ else
         }
     }
 
+    private void NavigateToDetails(int reservationId, bool isEditMode)
+    {
+        if (isEditMode)
+            NavigationManager.NavigateTo($"/admin/reservations/{reservationId}/update");
+        else
+            NavigationManager.NavigateTo($"/admin/reservations/{reservationId}");
+    }
+
+    private void ConfirmDelete(int id)
+    {
+        reservationIdToDelete = id;
+        showDeleteModal = true;
+    }
+
+    private async Task DeleteAsync()
+    {
+        await Http.DeleteAsync($"{WebApiAddress}/api/ticket/reservation/{reservationIdToDelete}");
+        showDeleteModal = false;
+        await LoadReservationsAsync();
+    }
+
+    private void CancelDelete() => showDeleteModal = false;
 }
 
