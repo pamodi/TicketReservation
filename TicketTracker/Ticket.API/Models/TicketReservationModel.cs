@@ -51,12 +51,17 @@ namespace Ticket.API.Models
 	{
 		public int Id { get; set; }
 
+		[Required(ErrorMessage = "Please enter your name.")]
+		public string Name { get; set; }
+
 		public string? Email { get; set; }
 
 		public string? PhoneNumber { get; set; }
 
 		public bool IsStudent { get; set; }
 
+		[Required(ErrorMessage = "Please enter the number of tickets.")]
+		[Range(1, 150, ErrorMessage = "Tickets must be between 1 and 150.")]
 		public int Tickets { get; set; }
 
 		public string? ContactedBy { get; set; }

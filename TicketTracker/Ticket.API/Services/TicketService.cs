@@ -101,6 +101,7 @@ namespace Ticket.API.Services
 		{
 			var reservation = _context.TicketReservation.FirstOrDefault(q => q.Id == reservationId && !q.IsDeleted) ?? throw new InvalidOperationException("Reservation not found.");
 
+			reservation.Name = updateReservationRequest.Name;
 			reservation.Email = updateReservationRequest.Email;
 			reservation.PhoneNumber = updateReservationRequest.PhoneNumber;
 			reservation.IsStudent = updateReservationRequest.IsStudent;
