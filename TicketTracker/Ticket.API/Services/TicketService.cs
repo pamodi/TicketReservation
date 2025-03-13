@@ -70,11 +70,12 @@ namespace Ticket.API.Services
 									 Name = q.Name,
 									 Email = q.Email,
 									 PhoneNumber = q.PhoneNumber,
+									 FormattedPhoneNumber = q.PhoneNumber,
 									 IsStudent = q.IsStudent,
 									 Tickets = q.NumberOfTickets,
 									 ContactedBy = q.ContactedBy,
 									 Comments = q.Comments,
-									 CreatedAt = q.CreatedAt
+									 CreatedAt = q.CreatedAt.DateTime.ToString("yyyy/MM/dd")
 								 }).ToListAsync();
 		}
 
@@ -88,13 +89,23 @@ namespace Ticket.API.Services
 				Id = reservation.Id,
 				Name = reservation.Name,
 				Email = reservation.Email,
-				PhoneNumber = reservation.PhoneNumber,
+				PhoneNumber = UnFormatPhone(reservation.PhoneNumber),
+				FormattedPhoneNumber = reservation.PhoneNumber,
 				IsStudent = reservation.IsStudent,
 				Tickets = reservation.NumberOfTickets,
 				ContactedBy = reservation.ContactedBy,
 				Comments = reservation.Comments,
-				CreatedAt = reservation.CreatedAt
+				CreatedAt = reservation.CreatedAt.DateTime.ToString("yyyy/MM/dd")
 			};
+		}
+
+		private string UnFormatPhone(string phoneNumber)
+		{
+			if (phoneNumber == null)
+				return string.Empty;
+
+			string digitsOnly = new(phoneNumber.Where(char.IsDigit).ToArray());
+			return digitsOnly;
 		}
 
 		public void UpdateReservation(int reservationId, UpdateReservationRequest updateReservationRequest)

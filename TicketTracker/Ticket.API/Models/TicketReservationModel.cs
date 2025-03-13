@@ -36,6 +36,8 @@ namespace Ticket.API.Models
 
 		public string? PhoneNumber { get; set; }
 
+		public string? FormattedPhoneNumber { get; set; }
+
 		public bool IsStudent { get; set; }
 
 		public int Tickets { get; set; }
@@ -44,7 +46,7 @@ namespace Ticket.API.Models
 
 		public string? Comments { get; set; }
 
-		public DateTimeOffset CreatedAt { get; set; }
+		public string CreatedAt { get; set; }
 	}
 
 	public class UpdateReservationRequest
