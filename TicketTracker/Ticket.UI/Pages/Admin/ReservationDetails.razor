@@ -6,6 +6,8 @@
 @inject IJSRuntime JS
 @inject NavigationManager NavigationManager
 
+<PageTitle>Reservation Details</PageTitle>
+
 <div class="container-fluid px-0 mt-0">
     <!-- Toast Notification -->
     <div class="position-fixed top-0 end-0 p-3" style="z-index: 1050;">
@@ -36,7 +38,7 @@
     </div>
 
     <!-- Ticket Reservation Form -->
-    <div class="container-fluid p-0 d-flex flex-column align-items-center justify-content-center mt-3">
+    <div class="container-fluid p-0 d-flex flex-column align-items-center justify-content-center mt-1 pt-0">
         <div class="container d-flex align-items-center justify-content-center">
             <div class="row w-100">
                 <!-- Ticket Reservation Form -->
@@ -71,7 +73,7 @@
                                         <label class="form-label">Phone Number <span class="text-danger">*</span></label>
                                     </div>
                                     <div class="col-md-8">
-                                        <InputText id="phoneInput" type="tel" class="form-control" @bind-Value="reservationDetailsModel.PhoneNumber" disabled="@(!isEditMode)" />
+                                        <InputText id="phoneInput" type="tel" class="form-control" @bind-Value="PhoneNumber" disabled="@(!isEditMode)" />
                                         <ValidationMessage For="() => reservationDetailsModel.PhoneNumber" class="text-danger" />
                                     </div>
                                 </div>
@@ -116,7 +118,7 @@
                                         <label class="form-label">Comments</label>
                                     </div>
                                     <div class="col-md-8">
-                                        <InputTextArea class="form-control" @bind-Value="reservationDetailsModel.Comments" rows="3" disabled="@(!isEditMode)" />
+                                        <InputTextArea class="form-control" @bind-Value="reservationDetailsModel.Comments" rows="4" disabled="@(!isEditMode)" />
                                     </div>
                                 </div>
 
@@ -125,7 +127,7 @@
                                         <label class="form-label">Reserved On</label>
                                     </div>
                                     <div class="col-md-8">
-                                        <InputText type="text" class="form-control" disabled="@(!isEditMode)" />
+                                        <InputText type="text" class="form-control" disabled @bind-Value="reservationDetailsModel.CreatedAt" />
                                     </div>
                                 </div>
 
@@ -274,7 +276,6 @@
 
 @code {
     [Parameter] public int id { get; set; }
-    private ReserveTicketModel reserveTicketModel = new();
     private bool isSubmitting = false;
     private string WebApiAddress => Configuration["WebApiAddress"];
     private List<string> lookupContacts = new();
@@ -283,6 +284,22 @@
     private string headerTitle = "🎟️ Reservation Details";
     private string buttonText = "🎟️ Reserve";
     public ReservationsModel reservationDetailsModel = new ReservationsModel();
+
+    private string PhoneNumber
+    {
+        get => isEditMode ? reservationDetailsModel.PhoneNumber : reservationDetailsModel.FormattedPhoneNumber;
+        set
+        {
+            if (isEditMode)
+            {
+                reservationDetailsModel.PhoneNumber = value;
+            }
+            else
+            {
+                reservationDetailsModel.FormattedPhoneNumber = value;
+            }
+        }
+    }
 
     protected override async Task OnInitializedAsync()
     {
@@ -310,7 +327,7 @@
 
     private async Task HandleSubmit()
     {
-        if (!IsPhoneNumberValid(reserveTicketModel.PhoneNumber))
+        if (!IsPhoneNumberValid(reservationDetailsModel.PhoneNumber))
         {
             await JS.InvokeVoidAsync("showPhoneErrorToast");
             return;
@@ -320,10 +337,10 @@
         {
             isSubmitting = true;
             StateHasChanged();
-            var response = await Http.PutAsJsonAsync($"{WebApiAddress}/api/ticket/reservation/{id}", reserveTicketModel);
+            var response = await Http.PutAsJsonAsync($"{WebApiAddress}/api/ticket/reservation/{id}", reservationDetailsModel);
             if (response.IsSuccessStatusCode)
             {
-                reserveTicketModel = new();
+                reservationDetailsModel = new();
                 StateHasChanged();
                 await JS.InvokeVoidAsync("showToast");
             }
@@ -339,7 +356,7 @@
             var errorMessage = "An error occurred: " + ex.Message;
         }
         isSubmitting = false;
-        // NavigationManager.NavigateTo($"/");
+        NavigationManager.NavigateTo($"/admin/reservations");
     }
 
     protected async Task onCancelClick()
