@@ -40,3 +40,11 @@ function saveAsFile(filename, contentBase64) {
 	link.click();
 	document.body.removeChild(link);
 }
+
+window.showLoginErrorToast = () => {
+	let toastEl = document.getElementById('loginErrorToast');
+	if (toastEl) {
+		let toast = new bootstrap.Toast(toastEl);
+		toast.show();
+	}
+};
