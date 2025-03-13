@@ -42,5 +42,32 @@ namespace Ticket.API.Controllers
 
 			return Ok(reservations);
 		}
+
+
+		[HttpGet("reservation/{reservationId}", Name = "GetReservationDetails")]
+		[ProducesResponseType(typeof(ReservationsModel), StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status400BadRequest)]
+		public IActionResult GetReservationDetails([FromRoute] int reservationId)
+		{
+			return Ok(_ticketService.GetReservationDetails(reservationId));
+		}
+
+		[HttpPut("reservation/{reservationId}", Name = "UpdateReservation")]
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status400BadRequest)]
+		public IActionResult UpdateReservation([FromRoute] int reservationId, [FromBody] UpdateReservationRequest updateReservationRequest)
+		{
+			_ticketService.UpdateReservation(reservationId, updateReservationRequest);
+			return Ok();
+		}
+
+		[HttpDelete("reservation/{reservationId}", Name = "DeleteReservation")]
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status400BadRequest)]
+		public IActionResult DeleteReservation([FromRoute] int reservationId)
+		{
+			_ticketService.DeleteReservation(reservationId);
+			return Ok();
+		}
 	}
 }

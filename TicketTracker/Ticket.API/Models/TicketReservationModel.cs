@@ -47,6 +47,23 @@ namespace Ticket.API.Models
 		public DateTimeOffset CreatedAt { get; set; }
 	}
 
+	public class UpdateReservationRequest
+	{
+		public int Id { get; set; }
+
+		public string? Email { get; set; }
+
+		public string? PhoneNumber { get; set; }
+
+		public bool IsStudent { get; set; }
+
+		public int Tickets { get; set; }
+
+		public string? ContactedBy { get; set; }
+
+		public string? Comments { get; set; }
+	}
+
 	public class RequiredIfEmptyAttribute : ValidationAttribute
 	{
 		private readonly string _otherProperty;

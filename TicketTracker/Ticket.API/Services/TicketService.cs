@@ -77,5 +77,48 @@ namespace Ticket.API.Services
 									 CreatedAt = q.CreatedAt
 								 }).ToListAsync();
 		}
+
+		public ReservationsModel GetReservationDetails(int reservationId)
+		{
+			var reservation = _context.TicketReservation
+				.FirstOrDefault(q => q.Id == reservationId && !q.IsDeleted) ?? throw new InvalidOperationException("Reservation not found.");
+
+			return new ReservationsModel()
+			{
+				Id = reservation.Id,
+				Name = reservation.Name,
+				Email = reservation.Email,
+				PhoneNumber = reservation.PhoneNumber,
+				IsStudent = reservation.IsStudent,
+				Tickets = reservation.NumberOfTickets,
+				ContactedBy = reservation.ContactedBy,
+				Comments = reservation.Comments,
+				CreatedAt = reservation.CreatedAt
+			};
+		}
+
+		public void UpdateReservation(int reservationId, UpdateReservationRequest updateReservationRequest)
+		{
+			var reservation = _context.TicketReservation.FirstOrDefault(q => q.Id == reservationId && !q.IsDeleted) ?? throw new InvalidOperationException("Reservation not found.");
+
+			reservation.Email = updateReservationRequest.Email;
+			reservation.PhoneNumber = updateReservationRequest.PhoneNumber;
+			reservation.IsStudent = updateReservationRequest.IsStudent;
+			reservation.NumberOfTickets = updateReservationRequest.Tickets;
+			reservation.ContactedBy = updateReservationRequest.ContactedBy;
+			reservation.Comments = updateReservationRequest.Comments;
+
+			_context.SaveChanges();
+		}
+
+		public void DeleteReservation(int reservationId)
+		{
+			var reservation = _context.TicketReservation.FirstOrDefault(q => q.Id == reservationId && !q.IsDeleted) ?? throw new InvalidOperationException("Reservation not found.");
+
+			reservation.IsDeleted = true;
+			reservation.UpdatedAt = DateTimeOffset.UtcNow;
+
+			_context.SaveChanges();
+		}
 	}
 }
