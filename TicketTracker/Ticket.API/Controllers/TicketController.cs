@@ -36,10 +36,6 @@ namespace Ticket.API.Controllers
 		public async Task<IActionResult> GetAllReservations()
 		{
 			var reservations = await _ticketService.GetAllReservations();
-
-			if (reservations == null || !reservations.Any())
-				return NotFound("No reservations found.");
-
 			return Ok(reservations);
 		}
 
