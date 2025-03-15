@@ -49,7 +49,7 @@
                                 <DataAnnotationsValidator />
                                 <div class="row">
                                     <div class="col-md-4">
-                                        <label class="form-label">Full Name <span class="text-danger">*</span></label>
+                                        <label class="form-label mt-2">Full Name <span class="text-danger">*</span></label>
                                     </div>
                                     <div class="col-md-8">
                                         <InputText class="form-control" @bind-Value="reserveTicketModel.Name" />
@@ -59,7 +59,7 @@
 
                                 <div class="row mt-2">
                                     <div class="col-md-4">
-                                        <label class="form-label">Email Address <span class="text-danger">*</span></label>
+                                        <label class="form-label mt-2">Email Address <span class="text-danger">*</span></label>
                                     </div>
                                     <div class="col-md-8">
                                         <InputText type="email" class="form-control" @bind-Value="reserveTicketModel.Email"  />
@@ -69,7 +69,7 @@
 
                                 <div class="row mt-2">
                                     <div class="col-md-4">
-                                        <label class="form-label">Phone Number <span class="text-danger">*</span></label>
+                                        <label class="form-label mt-2">Phone Number <span class="text-danger">*</span></label>
                                     </div>
                                     <div class="col-md-8">
                                         <InputText id="phoneInput" type="tel" class="form-control" @bind-Value="reserveTicketModel.PhoneNumber" />
@@ -89,7 +89,7 @@
 
                                 <div class="row mt-3">
                                     <div class="col-md-4">
-                                        <label class="form-label">Number of Tickets <span class="text-danger">*</span></label>
+                                        <label class="form-label mt-2">Number of Tickets <span class="text-danger">*</span></label>
                                     </div>
                                     <div class="col-md-8">
                                         <InputNumber class="form-control" @bind-Value="reserveTicketModel.Tickets" min="1" max="150"  />
@@ -99,7 +99,7 @@
 
                                 <div class="row mt-2">
                                     <div class="col-md-4">
-                                        <label class="form-label">Contacted By</label>
+                                        <label class="form-label mt-2">Contacted By</label>
                                     </div>
                                     <div class="col-md-8">
                                         <InputText class="form-control" list="contactedByOptions" @bind-Value="reserveTicketModel.ContactedBy" />
@@ -114,7 +114,7 @@
 
                                 <div class="row mt-2">
                                     <div class="col-md-4">
-                                        <label class="form-label">Comments</label>
+                                        <label class="form-label mt-2">Comments</label>
                                     </div>
                                     <div class="col-md-8">
                                         <InputTextArea class="form-control" @bind-Value="reserveTicketModel.Comments" rows="4"  />
@@ -176,6 +176,10 @@
         .form-control:focus {
             border-color: #ffef00a8;
             box-shadow: 0px 0px 10px #ffffff8f;
+        }
+
+        .form-control:disabled {
+            background-color: #e9ecef21;
         }
 
     .form-check-input {

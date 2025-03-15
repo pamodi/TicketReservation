@@ -23,7 +23,7 @@ else
 {
     <div class="container-fluid p-0 d-flex flex-column align-items-center justify-content-center mt-1 pt-0">
         <nav class="app-bar d-flex justify-content-between align-items-center">
-            <h3 class="logo">🎟 Manage Reservations</h3>
+            <h3 class="logo">📝 Manage Reservations</h3>
             <div class="d-flex align-items-center">
                 <span class="text-light me-3">Welcome Admin!</span>
                 <button class="btn btn-gold logout-btn" @onclick="Logout">
@@ -39,8 +39,8 @@ else
                         <input type="text" @bind="searchQuery" @oninput="OnSearch" class="form-control search-box w-100 w-md-auto" placeholder="🔍 Search..." />
                     </div>
                     <div class="col-6 col-md-auto text-center text-md-start">
-                        <button class="btn btn-success add-btn w-100 w-md-auto" title="Add New Reservation" @onclick="OnAddClick">
-                            <i class="bi bi-plus-circle"></i> ➕ Add Reservation
+                        <button class="btn btn-secondary add-btn w-100 w-md-auto" title="Add New Reservation" @onclick="OnAddClick">
+                            <i class="bi bi-plus-circle"></i> 📋 Add Reservation
                         </button>
                     </div>
                 </div>
@@ -104,7 +104,7 @@ else
                 <!-- Pagination with Buttons -->
                 <div class="row d-flex justify-content-between align-items-center" style="margin-top: -8px;">
                     <div class="col-auto">
-                        <button class="btn btn-success" @onclick="ExportToExcel">📥 Export</button>
+                        <button class="btn btn-secondary" @onclick="ExportToExcel">📥 Export</button>
                     </div>
                     <div class="col-auto">
                         <span class="total-records page-text">📊 Total Records: @totalRecords</span>
@@ -193,13 +193,13 @@ else
     }
 
     .btn-secondary {
-    background: linear-gradient(135deg, #6b0000, #d4af37);
+        background: linear-gradient(135deg, #211616, #62605c);
     border: none;
     color: white;
     }
 
     .btn-secondary:hover {
-    background: linear-gradient(135deg, #500000, #b89b2e);
+            background: linear-gradient(135deg, #2b2929, #62605ce0);
     }
 
     /* Buttons */
