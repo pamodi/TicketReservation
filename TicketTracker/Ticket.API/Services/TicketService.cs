@@ -75,7 +75,7 @@ namespace Ticket.API.Services
 									 Tickets = q.NumberOfTickets,
 									 ContactedBy = q.ContactedBy,
 									 Comments = q.Comments,
-									 CreatedAt = q.CreatedAt.DateTime.ToString("yyyy/MM/dd")
+									 CreatedAt = q.CreatedAt.DateTime.ToString("yyyy/MM/dd hh:mm:ss tt")
 								 }).ToListAsync();
 		}
 
@@ -95,7 +95,7 @@ namespace Ticket.API.Services
 				Tickets = reservation.NumberOfTickets,
 				ContactedBy = reservation.ContactedBy,
 				Comments = reservation.Comments,
-				CreatedAt = reservation.CreatedAt.DateTime.ToString("yyyy/MM/dd")
+				CreatedAt = reservation.CreatedAt.DateTime.ToString("yyyy/MM/dd hh:mm:ss tt")
 			};
 		}
 
