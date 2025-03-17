@@ -2,6 +2,7 @@
 
 @inject NavigationManager NavigationManager
 @inject IJSRuntime JS
+@inject IConfiguration Configuration
 
 <PageTitle>Admin Login</PageTitle>
 
@@ -66,20 +67,24 @@
 
 @code {
     private LoginModel loginModel = new();
+    private List<LoginModel> adminCredentials = new();
+
+    protected override void OnInitialized()
+    {
+        Configuration.GetSection("AdminCredentials").Bind(adminCredentials);
+    }
 
     private async Task HandleLogin()
     {
-        const string hardcodedUsername = "admin";
-        const string hardcodedPassword = "pass123";
+        var isValidUser = adminCredentials.Any(cred => cred.Username == loginModel.Username && cred.Password == loginModel.Password);
 
-        if (loginModel.Username == hardcodedUsername && loginModel.Password == hardcodedPassword)
+        if (isValidUser)
         {
             NavigationManager.NavigateTo("/admin/reservations");
         }
         else
         {
             await JS.InvokeVoidAsync("showLoginErrorToast");
-            return;
         }
     }
 }

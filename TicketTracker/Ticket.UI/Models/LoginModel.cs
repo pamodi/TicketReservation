@@ -5,9 +5,9 @@ namespace Ticket.UI.Models
 	public class LoginModel
 	{
 		[Required]
-		public string Username { get; set; } = "admin";
+		public string Username { get; set; }
 
 		[Required]
-		public string Password { get; set; } = "pass123";
+		public string Password { get; set; }
 	}
 }
