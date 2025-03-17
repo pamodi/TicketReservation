@@ -62,6 +62,8 @@ namespace Ticket.API.Services
 
 		public async Task<IEnumerable<ReservationsModel>> GetAllReservations()
 		{
+			TimeZoneInfo canadaTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
+
 			return await _context.TicketReservation
 								 .Where(u => !u.IsDeleted)
 								 .Select(q => new ReservationsModel()
@@ -75,7 +77,7 @@ namespace Ticket.API.Services
 									 Tickets = q.NumberOfTickets,
 									 ContactedBy = q.ContactedBy,
 									 Comments = q.Comments,
-									 CreatedAt = q.CreatedAt.DateTime.ToString("yyyy/MM/dd hh:mm:ss tt")
+									 CreatedAt = TimeZoneInfo.ConvertTimeFromUtc(q.CreatedAt.DateTime, canadaTimeZone).ToString("yyyy/MM/dd hh:mm:ss tt")
 								 }).ToListAsync();
 		}
 
@@ -83,6 +85,8 @@ namespace Ticket.API.Services
 		{
 			var reservation = _context.TicketReservation
 				.FirstOrDefault(q => q.Id == reservationId && !q.IsDeleted) ?? throw new InvalidOperationException("Reservation not found.");
+
+			TimeZoneInfo canadaTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
 
 			return new ReservationsModel()
 			{
@@ -95,7 +99,7 @@ namespace Ticket.API.Services
 				Tickets = reservation.NumberOfTickets,
 				ContactedBy = reservation.ContactedBy,
 				Comments = reservation.Comments,
-				CreatedAt = reservation.CreatedAt.DateTime.ToString("yyyy/MM/dd hh:mm:ss tt")
+				CreatedAt = TimeZoneInfo.ConvertTimeFromUtc(reservation.CreatedAt.DateTime, canadaTimeZone).ToString("yyyy/MM/dd hh:mm:ss tt")
 			};
 		}
 
